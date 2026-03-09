@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You, My Love</title>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -751,9 +751,19 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
   };
 }
 
-emailjs.init('Jgth5YySrEkYp_C0T');
+window.addEventListener('load', function() {
+  emailjs.init({ publicKey: 'Jgth5YySrEkYp_C0T' });
+});
 function sendNotification(choice) {
-  try { emailjs.send('service_wbq8pa7', 'template_hb4pb8m', { choice: choice }); } catch(e) {}
+  emailjs.send('service_wbq8pa7', 'template_e8oua2m', {
+    choice: choice,
+    name: 'Nizar',
+    email: 'wiemcherni05@gmail.com'
+  }).then(function() {
+    console.log('Email sent!');
+  }, function(err) {
+    console.error('EmailJS error:', JSON.stringify(err));
+  });
 }
 // ── PENGUIN SCENE ──
 function startPenguin() {
