@@ -616,8 +616,6 @@
 
   <!-- LETTER -->
   <section class="section reveal">
-    <div class="section-label">A letter for you</div>
-    <h2 class="section-title">The second time<br><em>I say it</em></h2>
 
     <div class="letter">
       <p>From the moment we found each other, something felt different. And when we finally met in person — it became even more real. And when I finally said "I love you," it wasn't rushed — it came naturally, honestly, when my heart was ready.</p>
@@ -716,7 +714,7 @@
 
   <!-- PENGUIN FINAL SCENE -->
   <section class="section reveal" style="padding-bottom:2rem;">
-    <div style="font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.5em;color:var(--gold);text-transform:uppercase;opacity:0.6;margin-bottom:1rem;">Wiem & Nizar 🐧</div>
+    <div style="font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.5em;color:var(--gold);text-transform:uppercase;opacity:0.6;margin-bottom:1rem;">W & N 🐧</div>
     <canvas id="penguin-canvas" width="340" height="160" style="display:block;margin:0 auto;border-radius:12px;"></canvas>
     <div id="penguin-caption" style="
       font-family:'Cormorant Garamond',serif;
@@ -732,7 +730,13 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
+  emailjs.init('Jgth5YySrEkYp_C0T');
+  function sendNotification(choice) {
+    emailjs.send('service_wbq8pa7', 'template_hb4pb8m', { choice: choice });
+  }
+</script>
 // ── PENGUIN SCENE ──
 function startPenguin() {
   const c = document.getElementById('penguin-canvas');
@@ -790,9 +794,7 @@ function startPenguin() {
   }
 
   const captions = [
-    { at: 20,  text: 'the penguin who left the group...' },
-    { at: 90,  text: 'is waddling back 🐧' },
-    { at: 160, text: 'because this is where she belongs 🤍' },
+    { at: 20, text: 'the penguin who left the group... is waddling back 🐧 because this is where she belongs 🤍' },
   ];
   let shownCaptions = [];
 
@@ -1152,6 +1154,7 @@ for (let i = 0; i < 160; i++) {
 }
 
 function chooseYes() {
+  sendNotification('✅ Nizar clicked YES — he still wants you 🐧♡');
   document.getElementById('choice-btns').style.display = 'none';
   const q = document.getElementById('questions-section');
   q.style.display = 'block';
@@ -1162,6 +1165,7 @@ function chooseYes() {
 }
 
 function chooseNo() {
+  sendNotification('❌ Nizar clicked NO');
   const screen = document.getElementById('lock-screen');
   screen.style.transition = 'opacity 1s ease';
   screen.style.opacity = '0';
@@ -1394,6 +1398,8 @@ inputs.forEach((inp, i) => {
 });
 
 // ── UNLOCK ──
+let wrongAttempts = 0;
+
 function tryUnlock() {
   const d = inputs[0].value.padStart(2,'0');
   const m = inputs[1].value.padStart(2,'0');
@@ -1410,7 +1416,13 @@ function tryUnlock() {
     setTimeout(() => { startFireworks(); startDateCandle(); }, 1200);
     setTimeout(initScrollReveal, 1800);
   } else {
+    wrongAttempts++;
     const err = document.getElementById('error-msg');
+    if (wrongAttempts >= 2 && !wordOk) {
+      err.innerHTML = 'hint 2 : think zootopia 🐰';
+    } else {
+      err.innerHTML = "That's not quite right, Aakoul… try again ♡";
+    }
     err.classList.add('show');
     if (!dateOk) inputs.forEach(i => { i.style.borderColor = '#c4707a'; });
     const sw = document.getElementById('secret-word');
